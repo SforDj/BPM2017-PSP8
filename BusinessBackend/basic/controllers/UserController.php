@@ -23,7 +23,6 @@ use User;
 class UserController extends Controller
 {
     public $base_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/User/";
-    public $enableCsrfValidation = false;
 
     /**
      * @throws \yii\base\InvalidConfigException
@@ -37,9 +36,9 @@ class UserController extends Controller
             $mobile = $request->get("mobile");
         }
         else if ($request->isPost) {
-
-            $mobile = $request->post("mobile");
-
+            $body = $request->getRawBody();
+            $param = json_decode($body);
+            $mobile = $param->mobile;
         }
         else {
             echo "others";
@@ -58,12 +57,12 @@ class UserController extends Controller
             return;
         }
 
-
         $user = UserManager::getUserByMobile($mobile);
         if ($user == null) {
             $user = UserManager::createUser($mobile);
         }
         UserManager::inactiveUser($user);
+        $user = UserManager::updateUser($user);
         $user_json = UserManager::encodeUser($user);
         $response = Yii::$app->response;
         $response->setStatusCode(200);
@@ -77,8 +76,10 @@ class UserController extends Controller
         $mobile = null;
         $traffic = null;
         if ($request->isPost) {
-            $mobile = $request->post("mobile");
-            $traffic = $request->post("traffic");
+            $body = $request->getRawBody();
+            $params = json_decode($body);
+            $mobile = $params->mobile;
+            $traffic = $params->traffic;
         }
         else {
             $response = Yii::$app->response;
@@ -100,6 +101,7 @@ class UserController extends Controller
         UserManager::resetTraffic($user, $traffic);
         UserManager::flushTraffic($user);
         UserManager::activeUser($user);
+        $user = UserManager::updateUser($user);
 
         $user_json = UserManager::encodeUser($user);
         $response = Yii::$app->response;
