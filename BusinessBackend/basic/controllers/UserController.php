@@ -18,8 +18,7 @@ use yii\web\JsonParser;
 include "../models/manager/UserManager.php";
 include "../models/model/User.php";
 use UserManager;
-use User;
-//use UserManager;
+//use User;
 
 class UserController extends Controller
 {
@@ -44,7 +43,7 @@ class UserController extends Controller
         if ($user == null) {
             $user = UserManager::createUser($mobile);
         }
-
+        UserManager::inactiveUser($user);
         $user_json = UserManager::encodeUser($user);
         $response = Yii::$app->response;
         $response->setStatusCode(200);

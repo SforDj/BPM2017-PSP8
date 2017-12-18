@@ -72,7 +72,5 @@ class Advertise
     {
         $this->picurl = $picurl;
     }
-
-
-
+    
 }
