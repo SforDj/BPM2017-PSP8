@@ -9,7 +9,6 @@
 class UserManager
 {
     public static $basic_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/User/";
-
     public static function createUser($mobile) {
 
         $post_data = json_encode(array(
@@ -130,8 +129,7 @@ class UserManager
         );
 
         curl_setopt($ch_update, CURLOPT_URL, $url);
-        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "put");
-        curl_setopt($ch_update, CURLOPT_HEADER,false);
+        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch_update, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch_update, CURLOPT_RETURNTRANSFER,true);
         curl_setopt($ch_update, CURLOPT_POSTFIELDS, $post_data);
@@ -139,6 +137,7 @@ class UserManager
         curl_close($ch_update);
 
         $ret_data = json_decode($ret_str);
+
         $user = new User($ret_data->id, $ret_data->mobile, $ret_data->traffic, $ret_data->telefee, $ret_data->cash,
             $ret_data->active, $ret_data->tradelay);
 
