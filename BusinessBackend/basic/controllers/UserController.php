@@ -109,7 +109,8 @@ class UserController extends Controller
         $mobile = null;
         $traffic = null;
         if ($request->isPost) {
-            $body = $request->getRawBody();
+            $body = trim($request->getRawBody(),'"');
+            $body = stripslashes($body);
             $params = json_decode($body);
             $mobile = $params->mobile;
             $traffic = $params->traffic;
