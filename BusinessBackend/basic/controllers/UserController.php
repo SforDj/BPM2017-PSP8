@@ -104,6 +104,46 @@ class UserController extends Controller
         $response->send();
     }
 
+    public function actionUpdateAndGetUserInfo() {
+        $request = Yii::$app->request;
+        $mobile = null;
+        $traffic = null;
+        if ($request->isPost) {
+            $body = $request->getRawBody();
+            $params = json_decode($body);
+            $mobile = $params->mobile;
+            $traffic = $params->traffic;
+        }
+        else {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Request Type.";
+            $response->send();
+            return;
+        }
+
+        if ($mobile == null || $traffic == null) {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "No param value.";
+            $response->send();
+            return;
+        }
+
+        $user = UserManager::getUserByMobile($mobile);
+        UserManager::resetTraffic($user, $traffic);
+        UserManager::flushTraffic($user);
+        $user = UserManager::updateUser($user);
+
+        $user_json = UserManager::encodeUser($user);
+        $response = Yii::$app->response;
+        $response->setStatusCode(200);
+        $response->content = $user_json;
+        $response->send();
+    }
+
+
+
     public function actionSendReward() {
         $request = Yii::$app->request;
         $mobile = null;

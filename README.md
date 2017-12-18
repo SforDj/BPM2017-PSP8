@@ -6,4 +6,8 @@
 # url: post
 # param in json: mobile, traffic
 # http://localhost:1234/index.php?r=user/update-user-info
+# 
+# url: post
+# param in json: mobile, traffic
+# http://localhost:1234/index.php?r=user/update-and-get-user-info
 
