@@ -11,6 +11,7 @@ namespace app\controllers;
 
 use function GuzzleHttp\Psr7\str;
 
+use function PHPSTORM_META\type;
 use Yii;
 use yii\web\Controller;
 use yii\web\JsonParser;
@@ -22,17 +23,11 @@ use User;
 
 class UserController extends Controller
 {
-    public $base_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/User/";
-
-    /**
-     * @throws \yii\base\InvalidConfigException
-     */
     public function actionGetUserInfoByMobile()
     {
         $request = Yii::$app->request;
         $mobile = null;
         if ($request->isGet) {
-            echo "get" . $mobile;
             $mobile = $request->get("mobile");
         }
         else if ($request->isPost) {
@@ -41,7 +36,6 @@ class UserController extends Controller
             $mobile = $param->mobile;
         }
         else {
-            echo "others";
             $response = Yii::$app->response;
             $response->setStatusCode(200);
             $response->content = "Wrong Request Type.";
@@ -109,6 +103,46 @@ class UserController extends Controller
         $response->content = $user_json;
         $response->send();
     }
+
+    public function actionSendReward() {
+        $request = Yii::$app->request;
+        $mobile = null;
+        $rewardtype = null;
+        $reward = null;
+        if ($request->isPost) {
+            $body = $request->getRawBody();
+            $params = json_decode($body);
+            $rewardtype = $params->rewardtype;
+            $reward = $params->reward;
+            $mobile = $params->mobile;
+        }
+        $user = UserManager::getUserByMobile($mobile);
+
+        switch ($rewardtype){
+            case 0:
+                UserManager::addAsset($user, $reward, 0, 0);
+                break;
+            case 1:
+                UserManager::addAsset($user, 0, $reward, 0);
+                break;
+            case 2:
+                UserManager::addAsset($user, 0, 0, $reward);
+                break;
+            case 3:
+                UserManager::addAsset($user, 0, 0, $reward);
+                break;
+            default:
+                break;
+        }
+
+        $user = UserManager::updateUser($user);
+        $user_json = UserManager::encodeUser($user);
+        $response = Yii::$app->response;
+        $response->setStatusCode(200);
+        $response->content = $user_json;
+        $response->send();
+    }
+
 
 
 

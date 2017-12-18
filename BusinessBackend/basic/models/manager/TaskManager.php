@@ -9,6 +9,7 @@
 class TaskManager
 {
     public static $basic_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/Task/";
+    public static $item_basic_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/Taskitem/";
 
     public static function createTask($name, $description, $type, $reward_type, $reward) {
 
@@ -45,6 +46,122 @@ class TaskManager
 
         return $task;
     }
+
+
+    public static function createTaskItem($taskid, $userid, $rangestart, $rangeend) {
+
+        $post_data = json_encode(array(
+            "taskid"=>$taskid,
+            "userid"=>$userid,
+            "rangestart"=>$rangestart,
+            "rangeend"=>$rangeend,
+            "state"=>0
+        ));
+
+        $ch_to_create = curl_init();
+        $header = array(
+            'Content-Type: application/json; charset=utf-8',
+            'Content-Length:' . strlen($post_data)
+        );
+
+        curl_setopt($ch_to_create, CURLOPT_URL, self::$item_basic_url);
+        curl_setopt($ch_to_create, CURLOPT_POST, true);
+        curl_setopt($ch_to_create, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_create, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch_to_create, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($ch_to_create, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_create);
+        curl_close($ch_to_create);
+
+        $ret_data = json_decode($ret_str);
+        $taskitem = new Taskitem($ret_data->id, $ret_data->taskid, $ret_data->userid, $ret_data->rangestart, $ret_data->rangeend,
+            $ret_data->state);
+
+        return $taskitem;
+    }
+
+    public static function userFinishTaskitem(Taskitem &$taskitem) {
+        $taskitem->setState(1);
+    }
+
+    public static function adminCheckTaskitem(Taskitem &$taskitem) {
+        $taskitem->setState(2);
+    }
+
+    public static function getTaskitemByUseridAndState($userid, $state) {
+        $taskitems = array();
+        $url = self::$item_basic_url . "?Taskitem.state=" . $state . "&Taskitem.userid=" . $userid;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+
+        $ret_data = json_decode($ret_str);
+
+        for ($i = 0; $i < sizeof($ret_data); $i ++) {
+            $data = $ret_data[$i];
+            $taskitem = new Taskitem($data->id, $data->taskid, $data->userid, $data->rangestart, $data->rangeend,
+                $data->state);
+            array_push($taskitems, $taskitem);
+        }
+
+        return $taskitems;
+    }
+
+    public static function getTaskitemByTaskidAndState($taskid, $state) {
+        $taskitems = array();
+        $url = self::$item_basic_url . "?Taskitem.state=" . $state . "&Taskitem.taskid=" . $taskid;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+
+        $ret_data = json_decode($ret_str);
+
+        for ($i = 0; $i < sizeof($ret_data); $i ++) {
+            $data = $ret_data[$i];
+            $taskitem = new Taskitem($data->id, $data->taskid, $data->userid, $data->rangestart, $data->rangeend,
+                $data->state);
+            array_push($taskitems, $taskitem);
+        }
+
+        return $taskitems;
+    }
+
+
+
+    public static function getTaskitemByTaskidAndUserid($taskid, $userid) {
+        $taskitems = array();
+        $url = self::$item_basic_url . "?Taskitem.taskid=" . $taskid . "&Taskitem.userid=" . $userid;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+
+        $ret_data = json_decode($ret_str);
+
+        for ($i = 0; $i < sizeof($ret_data); $i ++) {
+            $data = $ret_data[$i];
+            $taskitem = new Taskitem($data->id, $data->taskid, $data->userid, $data->rangestart, $data->rangeend,
+                $data->state);
+            array_push($taskitems, $taskitem);
+        }
+
+        return $taskitems;
+
+    }
+
+
 
     public static function getTaskById($id) {
         $url = self::$basic_url . $id;
@@ -86,7 +203,7 @@ class TaskManager
     }
 
     public static function getTasksByType($type){
-        $url = self::$basic_url . "?type=" . $type;
+        $url = self::$basic_url . "?Task.type=" . $type;
         $ch_to_get = curl_init();
         curl_setopt($ch_to_get, CURLOPT_URL, $url);
         curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
@@ -107,6 +224,29 @@ class TaskManager
         return $tasks;
     }
 
+    public static function getTasksByState($state){
+        $url = self::$basic_url . "?Task.state=" . $state;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+
+        $ret_data = json_decode($ret_str);
+
+        $tasks = array();
+        foreach ($ret_data as $d ) {
+            $task = new Task($d->id, $d->name, $d->description, $d->progress, $d->type,
+                $d->rewardtype, $d->reward, $d->state, $d->remain);
+            array_push($tasks, $task);
+        }
+
+        return $tasks;
+    }
+
+
     public static function substractReward(Task &$task, $sub_reward){
         $remain = $task->getRemain();
         $remain -= $sub_reward;
@@ -117,7 +257,7 @@ class TaskManager
         $task->setProgress($progress);
     }
 
-    public static function FinishTask(Task &$task) {
+    public static function finishTask(Task &$task) {
         $task->setState(1);
     }
 
