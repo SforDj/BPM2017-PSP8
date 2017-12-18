@@ -31,7 +31,8 @@ class UserController extends Controller
             $mobile = $request->get("mobile");
         }
         else if ($request->isPost) {
-            $body = $request->getRawBody();
+            $body = trim($request->getRawBody(),'"');
+            $body = stripslashes($body);
             $param = json_decode($body);
             $mobile = $param->mobile;
         }
@@ -70,7 +71,8 @@ class UserController extends Controller
         $mobile = null;
         $traffic = null;
         if ($request->isPost) {
-            $body = $request->getRawBody();
+            $body = trim($request->getRawBody(),'"');
+            $body = stripslashes($body);
             $params = json_decode($body);
             $mobile = $params->mobile;
             $traffic = $params->traffic;
@@ -151,7 +153,8 @@ class UserController extends Controller
         $rewardtype = null;
         $reward = null;
         if ($request->isPost) {
-            $body = $request->getRawBody();
+            $body = trim($request->getRawBody(),'"');
+            $body = stripslashes($body);
             $params = json_decode($body);
             $rewardtype = $params->rewardtype;
             $reward = $params->reward;
