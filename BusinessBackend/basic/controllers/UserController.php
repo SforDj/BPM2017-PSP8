@@ -23,6 +23,11 @@ use User;
 class UserController extends Controller
 {
     public $base_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/User/";
+    public $enableCsrfValidation = false;
+
+    /**
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionGetUserInfoByMobile()
     {
         $request = Yii::$app->request;
@@ -32,16 +37,9 @@ class UserController extends Controller
             $mobile = $request->get("mobile");
         }
         else if ($request->isPost) {
-            $post = $_POST;
-            echo json_encode($post);
-//            $response = Yii::$app->response;
-//            $response->setStatusCode(200);
-//            $response->content = json_encode($post);
-//            $response->send();
-//            return;
+
             $mobile = $request->post("mobile");
-//            echo "post" . $mobile;
-//            echo "post" . $mobile;
+
         }
         else {
             echo "others";
@@ -86,6 +84,14 @@ class UserController extends Controller
             $response = Yii::$app->response;
             $response->setStatusCode(200);
             $response->content = "Wrong Request Type.";
+            $response->send();
+            return;
+        }
+
+        if ($mobile == null || $traffic == null) {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "No param value.";
             $response->send();
             return;
         }
