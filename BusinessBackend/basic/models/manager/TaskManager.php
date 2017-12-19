@@ -193,7 +193,9 @@ class TaskManager
         $ret_data = json_decode($ret_str);
 
         $tasks = array();
-        foreach ($ret_data as $d ) {
+
+        for ($i = 0; $i < sizeof($ret_data->Task);$i ++) {
+            $d = $ret_data->Task[$i];
             $task = new Task($d->id, $d->name, $d->description, $d->progress, $d->type,
                 $d->rewardtype, $d->reward, $d->state, $d->remain);
             array_push($tasks, $task);
@@ -215,7 +217,8 @@ class TaskManager
         $ret_data = json_decode($ret_str);
 
         $tasks = array();
-        foreach ($ret_data as $d ) {
+        for ($i = 0; $i < sizeof($ret_data->Task);$i ++) {
+            $d = $ret_data->Task[$i];
             $task = new Task($d->id, $d->name, $d->description, $d->progress, $d->type,
                 $d->rewardtype, $d->reward, $d->state, $d->remain);
             array_push($tasks, $task);
@@ -237,7 +240,8 @@ class TaskManager
         $ret_data = json_decode($ret_str);
 
         $tasks = array();
-        foreach ($ret_data as $d ) {
+        for ($i = 0; $i < sizeof($ret_data->Task);$i ++) {
+            $d = $ret_data->Task[$i];
             $task = new Task($d->id, $d->name, $d->description, $d->progress, $d->type,
                 $d->rewardtype, $d->reward, $d->state, $d->remain);
             array_push($tasks, $task);

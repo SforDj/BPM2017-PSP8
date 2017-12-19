@@ -90,6 +90,25 @@ class QuestionManager
         return $quesques;
     }
 
+    public static function getQuestionMetaByTaskid($taskid) {
+        $url = self::$meta_basic_url . "?Quesques.taskid=" . $taskid;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+
+        $ret_data = json_decode($ret_str);
+
+        $ret_data = $ret_data->Quesques[0];
+        $quesques = new Quesques($ret_data->id, $ret_data->taskid, $ret_data->count, $ret_data->remain);
+
+        return $quesques;
+    }
+
+
     public static function getQuestionContentById($id) {
         $url = self::$content_basic_url . $id;
         $ch_to_get = curl_init();
@@ -119,6 +138,7 @@ class QuestionManager
         curl_close($ch_to_get);
 
         $ret_data = json_decode($ret_str);
+        $ret_data = $ret_data->Question;
 
         for ($i = 0; $i < sizeof($ret_data); $i ++) {
             $question_content_entry = new Question($ret_data[$i]->id, $ret_data[$i]->taskid, $ret_data[$i]->questionid, $ret_data[$i]->content,
@@ -247,7 +267,7 @@ class QuestionManager
             $obj_array = self::question_to_array($obj);
             array_push($objs, $obj_array);
         }
-        $str_encoded = json_encode($objs);
+        $str_encoded = json_encode($objs, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
 
@@ -263,7 +283,7 @@ class QuestionManager
     public static function encodeQuestionMeta(Quesques $obj)
     {
         $task_array = self::quesques_to_array($obj);
-        $str_encoded = json_encode($task_array);
+        $str_encoded = json_encode($task_array, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
 
@@ -285,6 +305,31 @@ class QuestionManager
         );
         return $ret;
     }
+
+    public static function questionArray_to_array(array $question){
+        $ret = array();
+
+        foreach ($question as $entry) {
+
+            $ret_entry = array(
+                "id" => $entry->getId(),
+                "taskid" => $entry->getTaskid(),
+                "questionid" => $entry->getQuestionid(),
+                "content" => $entry->getContent(),
+                "a" => $entry->getA(),
+                "b" => $entry->getB(),
+                "c" => $entry->getC(),
+                "d" => $entry->getD(),
+                "acount" => $entry->getAcount(),
+                "bcount" => $entry->getBcount(),
+                "ccount" => $entry->getCcount(),
+                "dcount" => $entry->getDcount()
+            );
+            array_push($ret, $ret_entry);
+        }
+        return $ret;
+    }
+
 
     public static function quesques_to_array(Quesques $ques_meta){
         $ret = array(

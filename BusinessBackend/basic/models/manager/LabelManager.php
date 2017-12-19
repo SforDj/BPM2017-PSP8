@@ -106,7 +106,8 @@ class LabelManager
         $ret_str = curl_exec($ch_to_get);
         curl_close($ch_to_get);
 
-        $ret_data = json_decode($ret_str)[0];
+        $ret_data = json_decode($ret_str);
+        $ret_data = $ret_data->Labelques[0];
         $labelques = new Labelques($ret_data->id, $ret_data->taskid, $ret_data->a, $ret_data->b, $ret_data->c,
             $ret_data->d, $ret_data->count, $ret_data->remain);
 
@@ -142,6 +143,7 @@ class LabelManager
         curl_close($ch_to_get);
 
         $ret_data = json_decode($ret_str);
+        $ret_data = $ret_data->Label;
 
         for ($i = 0; $i < sizeof($ret_data); $i ++) {
             $label_content_entry = new Label($ret_data[$i]->id, $ret_data[$i]->taskid, $ret_data[$i]->dataid, $ret_data[$i]->result,
@@ -201,7 +203,7 @@ class LabelManager
     public static function updateLabelMeta(Labelques $labelques) {
         $id = $labelques->getId();
         $url = self::$meta_basic_url . $id;
-        $post_data = self::encodeObj($labelques);
+        $post_data = self::encodeLabelMeta($labelques);
 
         $ch_update = curl_init();
         $header = array(
@@ -278,7 +280,7 @@ class LabelManager
             $obj_array = self::label_to_array($obj);
             array_push($objs, $obj_array);
         }
-        $str_encoded = json_encode($objs);
+        $str_encoded = json_encode($objs, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
 
@@ -287,14 +289,14 @@ class LabelManager
     public static function encodeLabel(Label $label)
     {
         $task_array = self::label_to_array($label);
-        $str_encoded = json_encode($task_array);
+        $str_encoded = json_encode($task_array, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
 
     public static function encodeLabelMeta(Labelques $label_meta)
     {
         $task_array = self::labelques_to_array($label_meta);
-        $str_encoded = json_encode($task_array);
+        $str_encoded = json_encode($task_array, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
 
@@ -311,6 +313,23 @@ class LabelManager
 
         return $ret;
     }
+
+    public static function labelArray_to_array(array $label){
+        $ret = array();
+        foreach ($label as $entry) {
+            $ret_entry = array(
+                "id" => $entry->getId(),
+                "taskid" => $entry->getTaskid(),
+                "dataid" => $entry->getDataid(),
+                "result" => $entry->getResult(),
+                "userid" => $entry->getUserid(),
+                "content" => $entry->getContent()
+            );
+            array_push($ret, $ret_entry);
+        }
+        return $ret;
+    }
+
 
     public static function labelques_to_array(Labelques $label_meta){
         $ret = array(

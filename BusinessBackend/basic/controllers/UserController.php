@@ -30,7 +30,7 @@ class UserController extends Controller
         if ($request->isGet) {
             $mobile = $request->get("mobile");
         }
-        else if ($request->isPost) {
+        elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $param = json_decode($body);
