@@ -113,8 +113,189 @@ class TaskController extends Controller
 
     }
 
+    public function actionSubmitQuestion()
+    {
+        $request = Yii::$app->request;
+        $taskid = null;
+        $userid = null;
+        $answers = null;
+
+        if ($request->isPost) {
+            $body = trim($request->getRawBody(), '"');
+            $body = stripslashes($body);
+            $params = json_decode($body);
+            $taskid = $params->taskid;
+            $userid = $params->userid;
+            $answers = $params->answers;
+        } else {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Request Type.";
+            $response->send();
+            return;
+        }
+
+//        $task = TaskManager::getTaskById($taskid);
+//        $question_meta = QuestionManager::getQuestionMetaByTaskid($taskid);
+        $taskitem_array = TaskManager::getTaskitemByTaskidAndUserid($taskid, $userid);
+        $taskitem = $taskitem_array[0];
+
+        if ($answers == null) {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "No Answers Received.";
+            $response->send();
+            return;
+        }
+
+        $answers = json_decode($answers, true);
+        if ($answers == null || $answers == "[]") {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Json Format.";
+            $response->send();
+            return;
+        }
+
+        $question_entrys = QuestionManager::receiveAnswer($taskid, $answers);
+        TaskManager::userFinishTaskitem($taskitem);
+        QuestionManager::updateQuesContent($question_entrys);
+        TaskManager::updateTaskitem($taskitem);
+
+        $response = Yii::$app->response;
+        $response->setStatusCode(200);
+        $response->content = json_encode(array(
+            "state" => 1
+        ));
+        $response->send();
+        return;
+    }
 
 
+    public function actionSumbitLabel() {
+        $request = Yii::$app->request;
+        $taskid = null;
+        $userid = null;
+        $answers = null;
+
+        if ($request->isPost) {
+            $body = trim($request->getRawBody(), '"');
+            $body = stripslashes($body);
+            $params = json_decode($body);
+            $taskid = $params->taskid;
+            $userid = $params->userid;
+            $answers = $params->answers;
+        } else {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Request Type.";
+            $response->send();
+            return;
+        }
+
+//        $task = TaskManager::getTaskById($taskid);
+//        $label_meta = LabelManager::getLabelMetaByTaskid($taskid);
+        $taskitem_array = TaskManager::getTaskitemByTaskidAndUserid($taskid, $userid);
+
+        if ($answers == null) {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "No Answers Received.";
+            $response->send();
+            return;
+        }
+
+        $answers = json_decode($answers, true);
+        if ($answers == null || $answers == "[]") {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Json Format.";
+            $response->send();
+            return;
+        }
+
+        $label_entrys = LabelManager::receiveAnswer($taskid, $userid, $answers);
+        LabelManager::updateLabelContent($label_entrys);
+
+        foreach ($taskitem_array as $taskitem) {
+            TaskManager::userFinishTaskitem($taskitem);
+            TaskManager::updateTaskitem($taskitem);
+        }
+
+        $response = Yii::$app->response;
+        $response->setStatusCode(200);
+        $response->content = json_encode(array(
+            "state" => 1
+        ));
+        $response->send();
+        return;
+    }
+
+    public function actionReceiveTask() {
+        $request = Yii::$app->request;
+        $taskid = null;
+        $userid = null;
+        $type = null;
+        $assign_count = null;
+
+        if ($request->isPost) {
+            $body = trim($request->getRawBody(), '"');
+            $body = stripslashes($body);
+            $params = json_decode($body);
+            $taskid = $params->taskid;
+            $userid = $params->userid;
+            $type = $params->type;
+            $assign_count = $params->assign_count;
+        } else {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Request Type.";
+            $response->send();
+            return;
+        }
+
+        $task = TaskManager::getTaskById($taskid);
+        switch ($type) {
+            case 0:
+                $question_meta = QuestionManager::getQuestionMetaByTaskid($taskid);
+                $question_index = $question_meta->getCount() - $question_meta->getRemain();
+                TaskManager::createTaskItem($taskid, $userid, $question_index, $question_index + $assign_count);
+                QuestionManager::remainDesc($question_meta);
+                $progress = 1.0 - doubleval($question_meta->getRemain() / $question_meta->getCount());
+                TaskManager::setProgress($task, $progress);
+                QuestionManager::updateQuesMeta($question_meta);
+                TaskManager::updateTask($task);
+                $response = Yii::$app->response;
+                $response->setStatusCode(200);
+                $response->content = json_encode(array(
+                    "state" => 1
+                ));
+                $response->send();
+                return;
+            case 1:
+                $label_meta = LabelManager::getLabelMetaByTaskid($taskid);
+                $label_index = $label_meta->getRemain();
+                TaskManager::createTaskItem($taskid, $userid, $label_index, $label_index + $assign_count);
+                LabelManager::assignLabel($taskid, $userid, $assign_count);
+                $progress = doubleval($label_meta->getRemain() / $label_meta->getCount());
+                TaskManager::setProgress($task, $progress);
+                LabelManager::updateLabelMeta($label_meta);
+                TaskManager::updateTask($task);
+                $response = Yii::$app->response;
+                $response->setStatusCode(200);
+                $response->content = json_encode(array(
+                    "state" => 1
+                ));
+                $response->send();
+                return;
+            default:
+                $response = Yii::$app->response;
+                $response->setStatusCode(200);
+                $response->content = "Task Type Error.";
+                $response->send();
+                return;
+        }
+    }
 
 
 

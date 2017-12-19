@@ -293,26 +293,70 @@ class TaskManager
         return $task;
     }
 
+    public static function updateTaskitem(Taskitem $taskitem){
+        $id = $taskitem->getId();
+        $url = self::$item_basic_url . $id;
+
+        $post_data = self::encodeTaskitem($taskitem);
+
+        $ch_update = curl_init();
+        $header = array(
+            'Content-Type: application/json; charset=utf-8',
+            'Content-Length:' . strlen($post_data)
+        );
+
+        curl_setopt($ch_update, CURLOPT_URL, $url);
+        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "put");
+        curl_setopt($ch_update, CURLOPT_HEADER,false);
+        curl_setopt($ch_update, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch_update, CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($ch_update, CURLOPT_POSTFIELDS, $post_data);
+        $ret_str = curl_exec($ch_update);
+        curl_close($ch_update);
+
+        $ret_data = json_decode($ret_str);
+        $taskitem = new Taskitem($ret_data->id, $ret_data->taskid, $ret_data->userid, $ret_data->rangestart, $ret_data->rangeend,
+            $ret_data->state);
+
+        return $taskitem;
+    }
+
+
     public static function encodeTask(Task $task)
     {
-        $task_array = self::object_to_array($task);
-        $str_encoded = json_encode($task_array);
+        $task_array = self::task_to_array($task);
+        $str_encoded = json_encode($task_array, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
+
+    public static function encodeTaskitem(Taskitem $taskitem)
+    {
+        $task_array = self::taskitem_to_array($taskitem);
+        $str_encoded = json_encode($task_array, JSON_UNESCAPED_UNICODE);
+        return $str_encoded;
+    }
+
 
     public static function encodeTasks(array $tasks)
     {
         $tasks_array = array();
         foreach ($tasks as $task) {
-            $task_array = self::object_to_array($task);
+            $task_array = self::task_to_array($task);
             array_push($tasks_array, $task_array);
         }
-        $str_encoded = json_encode($tasks_array);
+        $str_encoded = json_encode($tasks_array, JSON_UNESCAPED_UNICODE);
+        return $str_encoded;
+    }
+
+    public static function encodeTaskitems(array $taskitems)
+    {
+        $taskitems_array = self::taskitemArray_to_array($taskitems);
+        $str_encoded = json_encode($taskitems_array, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
 
 
-    public static function object_to_array(Task $task){
+    public static function task_to_array(Task $task){
         $ret = array(
             "id"=>$task->getId(),
             "name"=>$task->getName(),
@@ -326,6 +370,35 @@ class TaskManager
         );
         return $ret;
     }
+
+    public static function taskitem_to_array(Taskitem $taskitem){
+        $ret = array(
+            "id"=>$taskitem->getId(),
+            "taskid"=>$taskitem->getTaskid(),
+            "userid"=>$taskitem->getUserid(),
+            "rangestart"=>$taskitem->getRangestart(),
+            "rangeend"=>$taskitem->getRangeend(),
+            "state"=>$taskitem->getState()
+        );
+        return $ret;
+    }
+
+    public static function taskitemArray_to_array(array $taskitems){
+        $ret = null;
+        foreach ($taskitems as $entry) {
+            $ret_entry = array(
+                "id" => $entry->getId(),
+                "taskid" => $entry->getTaskid(),
+                "userid" => $entry->getUserid(),
+                "rangestart" => $entry->getRangestart(),
+                "rangeend" => $entry->getRangeend(),
+                "state" => $entry->getState()
+            );
+            array_push($ret, $ret_entry);
+        }
+        return $ret;
+    }
+
 
 
 

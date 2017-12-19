@@ -55,7 +55,7 @@ class LabelManager
 
         for ($i = 0; $i < sizeof($labels); $i ++) {
 
-            $post_data = self::encodeObj($labels[$i]);
+            $post_data = self::encodeLabel($labels[$i]);
 
             $header = array(
                 'Content-Type: application/json; charset=utf-8',
@@ -180,7 +180,8 @@ class LabelManager
         self::labelSort($question_entrys);
 
         for ($i = 0; $i < sizeof($answers); $i ++){
-            $answer = $answers[$i];
+            $label_index = $label_entrys[$i]->getDataid();
+            $answer = $answers[$label_index];
             $label_entrys[$i]->setResult($answer);
         }
 

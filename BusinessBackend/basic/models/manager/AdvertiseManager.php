@@ -76,7 +76,7 @@ class AdvertiseManager
     public static function encodeAdvertise(Advertise $advertise)
     {
         $advertise_array = self::object_to_array($advertise);
-        $str_encoded = json_encode($advertise_array);
+        $str_encoded = json_encode($advertise_array, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
 

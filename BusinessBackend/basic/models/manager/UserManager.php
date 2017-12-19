@@ -148,7 +148,7 @@ class UserManager
     public static function encodeUser(User $user)
     {
         $user_array = self::object_to_array($user);
-        $str_encoded = json_encode($user_array);
+        $str_encoded = json_encode($user_array, JSON_UNESCAPED_UNICODE);
         return $str_encoded;
     }
 
