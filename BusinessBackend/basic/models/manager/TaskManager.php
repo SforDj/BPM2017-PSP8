@@ -89,6 +89,10 @@ class TaskManager
         $taskitem->setState(2);
     }
 
+    public static function rewardGotTaskitem(Taskitem &$taskitem) {
+        $taskitem->setState(3);
+    }
+
     public static function getTaskitemByUseridAndState($userid, $state) {
         $taskitems = array();
         $url = self::$item_basic_url . "?Taskitem.state=" . $state . "&Taskitem.userid=" . $userid;
@@ -179,6 +183,26 @@ class TaskManager
 
         return $task;
     }
+
+    public static function getTaskitemById($id) {
+        $url = self::$item_basic_url . $id;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+
+        $data = json_decode($ret_str);
+        $taskitem = new Taskitem($data->id, $data->taskid, $data->userid, $data->rangestart, $data->rangeend,
+            $data->state);
+
+        return $taskitem;
+    }
+
+
+
 
     public static function getAllTasks() {
         $url = self::$basic_url;
