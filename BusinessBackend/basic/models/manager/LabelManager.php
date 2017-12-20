@@ -88,7 +88,10 @@ class LabelManager
         $ret_str = curl_exec($ch_to_get);
         curl_close($ch_to_get);
 
+
         $ret_data = json_decode($ret_str);
+
+
         $labelques = new Labelques($ret_data->id, $ret_data->taskid, $ret_data->a, $ret_data->b, $ret_data->c,
             $ret_data->d, $ret_data->count, $ret_data->remain);
 
@@ -108,6 +111,8 @@ class LabelManager
 
         $ret_data = json_decode($ret_str);
         $ret_data = $ret_data->Labelques[0];
+
+
         $labelques = new Labelques($ret_data->id, $ret_data->taskid, $ret_data->a, $ret_data->b, $ret_data->c,
             $ret_data->d, $ret_data->count, $ret_data->remain);
 
@@ -191,7 +196,8 @@ class LabelManager
     public static function assignLabel($taskid, $userid, $assign_count) {
         $label_entrys = self::getLabelContentsByTaskid($taskid);
         self::labelSort($label_entrys);
-        $label_meta = self::getLabelMetaById($taskid);
+        $label_meta = self::getLabelMetaByTaskid($taskid);
+
         $low = $label_meta->getRemain();
         $high = $low + $assign_count;
         for ($i = $low; $i < $high; $i ++){
@@ -213,7 +219,7 @@ class LabelManager
         );
 
         curl_setopt($ch_update, CURLOPT_URL, $url);
-        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "put");
+        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch_update, CURLOPT_HEADER,false);
         curl_setopt($ch_update, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch_update, CURLOPT_RETURNTRANSFER,true);
@@ -233,12 +239,12 @@ class LabelManager
     public static function updateLabelContent(array $labels) {
         $labels_content = array();
         $ch_update = curl_init();
-        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "put");
+        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch_update, CURLOPT_HEADER,false);
         curl_setopt($ch_update, CURLOPT_RETURNTRANSFER,true);
 
         foreach ($labels as $label) {
-            $post_data = self::encodeObj($label);
+            $post_data = self::encodeLabel($label);
             $header = array(
                 'Content-Type: application/json; charset=utf-8',
                 'Content-Length:' . strlen($post_data)

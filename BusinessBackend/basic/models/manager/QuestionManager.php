@@ -51,7 +51,7 @@ class QuestionManager
 
         for ($i = 0; $i < sizeof($questions); $i ++) {
 
-            $post_data = self::encodeObj($questions[$i]);
+            $post_data = self::encodeQuestion($questions[$i]);
 
             $header = array(
                 'Content-Type: application/json; charset=utf-8',
@@ -191,7 +191,7 @@ class QuestionManager
     public static function updateQuesMeta(Quesques $quesques) {
         $id = $quesques->getId();
         $url = self::$meta_basic_url . $id;
-        $post_data = self::encodeObj($quesques);
+        $post_data = self::encodeQuestionMeta($quesques);
 
         $ch_update = curl_init();
         $header = array(
@@ -200,15 +200,18 @@ class QuestionManager
         );
 
         curl_setopt($ch_update, CURLOPT_URL, $url);
-        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "put");
-        curl_setopt($ch_update, CURLOPT_HEADER,false);
+        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch_update, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch_update, CURLOPT_RETURNTRANSFER,true);
         curl_setopt($ch_update, CURLOPT_POSTFIELDS, $post_data);
         $ret_str = curl_exec($ch_update);
+
+
         curl_close($ch_update);
 
         $ret_data = json_decode($ret_str);
+
+
         $ques_meta = new Quesques($ret_data->id, $ret_data->taskid, $ret_data->count, $ret_data->remain);
 
         return $ques_meta;
@@ -218,12 +221,12 @@ class QuestionManager
     public static function updateQuesContent(array $questions) {
         $questions_content = array();
         $ch_update = curl_init();
-        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "put");
+        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch_update, CURLOPT_HEADER,false);
         curl_setopt($ch_update, CURLOPT_RETURNTRANSFER,true);
 
         foreach ($questions as $question) {
-            $post_data = self::encodeObj($question);
+            $post_data = self::encodeQuestion($question);
             $header = array(
                 'Content-Type: application/json; charset=utf-8',
                 'Content-Length:' . strlen($post_data)

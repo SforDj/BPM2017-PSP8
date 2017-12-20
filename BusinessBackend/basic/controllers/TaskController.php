@@ -11,7 +11,10 @@ namespace app\controllers;
 include "../models/manager/TaskManager.php";
 include "../models/manager/QuestionManager.php";
 include "../models/manager/LabelManager.php";
+include "../models/manager/UserManager.php";
 include "../models/model/Task.php";
+include "../models/model/User.php";
+include "../models/model/Taskitem.php";
 include "../models/model/Question.php";
 include "../models/model/Quesques.php";
 include "../models/model/Label.php";
@@ -19,11 +22,13 @@ include "../models/model/Labelques.php";
 use TaskManager;
 use QuestionManager;
 use LabelManager;
+use UserManager;
 use Task;
 use Question;
 use Quesques;
 use Label;
 use Labelques;
+use Taskitem;
 
 use Yii;
 use yii\web\Controller;
@@ -244,7 +249,6 @@ class TaskController extends Controller
             $params = json_decode($body);
             $taskid = $params->taskid;
             $userid = $params->userid;
-            $type = $params->type;
             $assign_count = $params->assign_count;
         } else {
             $response = Yii::$app->response;
@@ -253,6 +257,8 @@ class TaskController extends Controller
             $response->send();
             return;
         }
+
+        $type = TaskManager::getTaskById($taskid)->getType();
 
         $task = TaskManager::getTaskById($taskid);
         switch ($type) {
@@ -264,6 +270,8 @@ class TaskController extends Controller
                 $progress = 1.0 - doubleval($question_meta->getRemain() / $question_meta->getCount());
                 TaskManager::setProgress($task, $progress);
                 QuestionManager::updateQuesMeta($question_meta);
+
+
                 TaskManager::updateTask($task);
                 $response = Yii::$app->response;
                 $response->setStatusCode(200);
@@ -274,12 +282,16 @@ class TaskController extends Controller
                 return;
             case 1:
                 $label_meta = LabelManager::getLabelMetaByTaskid($taskid);
+
                 $label_index = $label_meta->getRemain();
                 TaskManager::createTaskItem($taskid, $userid, $label_index, $label_index + $assign_count);
-                LabelManager::assignLabel($taskid, $userid, $assign_count);
-                $progress = doubleval($label_meta->getRemain() / $label_meta->getCount());
+                $label_inform = LabelManager::assignLabel($taskid, $userid, $assign_count);
+
+
+                $progress = doubleval(($label_meta->getRemain() + $assign_count) / $label_meta->getCount());
                 TaskManager::setProgress($task, $progress);
-                LabelManager::updateLabelMeta($label_meta);
+                LabelManager::updateLabelMeta($label_inform[1]);
+                LabelManager::updateLabelContent($label_inform[0]);
                 TaskManager::updateTask($task);
                 $response = Yii::$app->response;
                 $response->setStatusCode(200);

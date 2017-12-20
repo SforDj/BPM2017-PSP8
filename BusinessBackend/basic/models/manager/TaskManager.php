@@ -302,7 +302,7 @@ class TaskManager
         );
 
         curl_setopt($ch_update, CURLOPT_URL, $url);
-        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "put");
+        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch_update, CURLOPT_HEADER,false);
         curl_setopt($ch_update, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch_update, CURLOPT_RETURNTRANSFER,true);
@@ -330,7 +330,7 @@ class TaskManager
         );
 
         curl_setopt($ch_update, CURLOPT_URL, $url);
-        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "put");
+        curl_setopt($ch_update, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch_update, CURLOPT_HEADER,false);
         curl_setopt($ch_update, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch_update, CURLOPT_RETURNTRANSFER,true);
