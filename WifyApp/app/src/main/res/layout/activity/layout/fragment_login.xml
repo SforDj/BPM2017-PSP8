@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ist.cadillacpaltform.wifyapp.UI.Fragment.LoginFragment">
+
+    <ImageView
+        android:id="@+id/iv_wifi"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/wifi3" />
+
+
+    <com.dd.CircularProgressButton
+        android:id="@+id/cpb_wifi"
+        android:layout_width="128dp"
+        android:layout_height="64dp"
+        android:layout_below="@+id/iv_wifi"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:cpb_colorIndicator="@color/black"
+        app:cpb_cornerRadius="48dp"
+        app:cpb_selectorIdle="@drawable/idle_state_selector"
+        app:cpb_textComplete="连接成功"
+        app:cpb_textError="连接失败"
+        app:cpb_textIdle="连接上网" />
+
+    <com.gongwen.marqueen.SimpleMarqueeView
+        android:id="@+id/simpleMarqueeView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/cpb_wifi"
+        android:layout_marginTop="20dp"
+        android:background="@color/lightgray"
+        android:flipInterval="2500"
+        android:inAnimation="@anim/in_right"
+        android:outAnimation="@anim/out_left"
+        app:marqueeAnimDuration="2000"
+        app:smvTextColor="@color/red"
+        app:smvTextGravity="center"
+        app:smvTextSize="20sp"></com.gongwen.marqueen.SimpleMarqueeView>
+
+</RelativeLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whitesmoke"
+    android:padding="15dp"
+    android:orientation="vertical">
+    <TextView
+        android:textColor="@color/black"
+        android:text="1.默认:"
+        android:textStyle="bold"
+        android:id="@+id/tv_question"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:background="@drawable/question_answer_shape"
+            android:id="@+id/A"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:checked="true"/>
+        <RadioButton
+            android:background="@drawable/question_answer_shape"
+            android:id="@+id/B"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="B"/>
+        <RadioButton
+            android:background="@drawable/question_answer_shape"
+            android:id="@+id/C"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="C"/>
+        <RadioButton
+            android:background="@drawable/question_answer_shape"
+            android:id="@+id/D"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="D"/>
+    </RadioGroup>
+</LinearLayout>

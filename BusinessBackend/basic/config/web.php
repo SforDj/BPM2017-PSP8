@@ -48,9 +48,11 @@ $config = [
 //        'urlManager' => [
 //            'enablePrettyUrl' => true,
 //            'showScriptName' => false,
-//            'rules' => [
-//            ],
-//        ],
+//            'enableStrictParsing' => true,
+//            'suffix' => ".html",
+//            'rules' => [ '' => 'site/index', // 如果没有这里，则访问域名不能直接打开默认Action
+//            ]
+//        ]
     ],
     'params' => $params,
 
