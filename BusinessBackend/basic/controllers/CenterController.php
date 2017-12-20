@@ -158,7 +158,7 @@ class CenterController extends Controller
                     case 0:
                         $reward = $task->getReward();
                         UserManager::addAsset($user, $reward, 0, 0);
-                        TaskManager::userFinishTaskitem($taskitem);
+                        TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
                         $response = Yii::$app->response;
@@ -171,7 +171,7 @@ class CenterController extends Controller
                     case 1:
                         $reward = $task->getReward();
                         UserManager::addAsset($user, 0, $reward, 0);
-                        TaskManager::userFinishTaskitem($taskitem);
+                        TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
                         $response = Yii::$app->response;
@@ -184,7 +184,7 @@ class CenterController extends Controller
                     case 2:
                         $reward = $task->getReward();
                         UserManager::addAsset($user, 0, 0, $reward);
-                        TaskManager::userFinishTaskitem($taskitem);
+                        TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
                         $response = Yii::$app->response;
@@ -208,7 +208,7 @@ class CenterController extends Controller
                             $reward = 0;
 
                         UserManager::addAsset($user, 0, 0, $reward);
-                        TaskManager::userFinishTaskitem($taskitem);
+                        TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
                         $response = Yii::$app->response;
@@ -238,7 +238,7 @@ class CenterController extends Controller
                         $ratio = ($rangeend - $rangestart) * 1.0 / $total;
                         $reward = $reward * $ratio;
                         UserManager::addAsset($user, $reward, 0, 0);
-                        TaskManager::userFinishTaskitem($taskitem);
+                        TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
                         $response = Yii::$app->response;
@@ -257,7 +257,7 @@ class CenterController extends Controller
                         $ratio = ($rangeend - $rangestart) * 1.0 / $total;
                         $reward = $reward * $ratio;
                         UserManager::addAsset($user, 0, $reward, 0);
-                        TaskManager::userFinishTaskitem($taskitem);
+                        TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
                         $response = Yii::$app->response;
@@ -276,7 +276,7 @@ class CenterController extends Controller
                         $ratio = ($rangeend - $rangestart) * 1.0 / $total;
                         $reward = $reward * $ratio;
                         UserManager::addAsset($user, 0, 0, $reward);
-                        TaskManager::userFinishTaskitem($taskitem);
+                        TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
                         $response = Yii::$app->response;
