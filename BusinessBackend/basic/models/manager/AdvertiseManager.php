@@ -56,6 +56,16 @@ class AdvertiseManager
         return $advertise;
     }
 
+
+
+
+
+
+
+
+
+
+
     public static function getAdvertiseById($id) {
         $url = self::$basic_url . "?Advertise.id=" . $id;
         $ch_to_get = curl_init();
