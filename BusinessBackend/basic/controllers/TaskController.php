@@ -124,13 +124,14 @@ class TaskController extends Controller
         $taskid = null;
         $userid = null;
         $answers = null;
+        $mobile = null;
 
         if ($request->isPost) {
             $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);
             $params = json_decode($body);
             $taskid = $params->taskid;
-            $userid = $params->userid;
+            $mobile = $params->mobile;
             $answers = $params->answers;
         } else {
             $response = Yii::$app->response;
@@ -139,6 +140,8 @@ class TaskController extends Controller
             $response->send();
             return;
         }
+
+        $userid = UserManager::getUserByMobile($mobile)->getId();
 
 //        $task = TaskManager::getTaskById($taskid);
 //        $question_meta = QuestionManager::getQuestionMetaByTaskid($taskid);
@@ -182,13 +185,14 @@ class TaskController extends Controller
         $taskid = null;
         $userid = null;
         $answers = null;
+        $mobile = null;
 
         if ($request->isPost) {
             $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);
             $params = json_decode($body);
             $taskid = $params->taskid;
-            $userid = $params->userid;
+            $mobile = $params->mobile;
             $answers = $params->answers;
         } else {
             $response = Yii::$app->response;
@@ -197,6 +201,8 @@ class TaskController extends Controller
             $response->send();
             return;
         }
+
+        $userid = UserManager::getUserByMobile($mobile)->getId();
 
 //        $task = TaskManager::getTaskById($taskid);
 //        $label_meta = LabelManager::getLabelMetaByTaskid($taskid);
@@ -240,6 +246,7 @@ class TaskController extends Controller
         $request = Yii::$app->request;
         $taskid = null;
         $userid = null;
+        $mobile = null;
         $type = null;
         $assign_count = null;
 
@@ -248,7 +255,7 @@ class TaskController extends Controller
             $body = stripslashes($body);
             $params = json_decode($body);
             $taskid = $params->taskid;
-            $userid = $params->userid;
+            $mobile = $params->mobile;
             $assign_count = $params->assign_count;
         } else {
             $response = Yii::$app->response;
@@ -257,6 +264,8 @@ class TaskController extends Controller
             $response->send();
             return;
         }
+
+        $userid = UserManager::getUserByMobile($mobile)->getId();
 
         $type = TaskManager::getTaskById($taskid)->getType();
 
