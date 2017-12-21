@@ -158,19 +158,19 @@ class QuestionManager
         for ($i = 0; $i < sizeof($answers); $i ++){
             $answer = $answers[$i];
             switch ($answer) {
-                case $question_entrys[$i]->getA():
+                case "A":
                     $acount = $question_entrys[$i]->getAcount() + 1;
                     $question_entrys[$i]->setAcount($acount);
                     break;
-                case $question_entrys[$i]->getB();
+                case "B";
                     $bcount = $question_entrys[$i]->getBcount() + 1;
                     $question_entrys[$i]->setBcount($bcount);
                     break;
-                case $question_entrys[$i]->getC():
+                case "C":
                     $ccount = $question_entrys[$i]->getCcount() + 1;
                     $question_entrys[$i]->setCcount($ccount);
                     break;
-                case $question_entrys[$i]->getD():
+                case "D":
                     $dcount = $question_entrys[$i]->getDcount() + 1;
                     $question_entrys[$i]->setDcount($dcount);
                     break;

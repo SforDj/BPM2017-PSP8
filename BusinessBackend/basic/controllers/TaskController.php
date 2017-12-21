@@ -125,13 +125,16 @@ class TaskController extends Controller
         $userid = null;
         $answers = null;
         $mobile = null;
+//        Yii::warning("~~~~~~~~~~~~~~~~~~~~~~~");
+//        Yii::warning($request->getRawBody());
 
         if ($request->isPost) {
             $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);
             $params = json_decode($body);
             $taskid = $params->taskid;
-            $mobile = $params->mobile;
+//            $mobile = $params->mobile;
+            $userid = $params->userid;
             $answers = $params->answers;
         } else {
             $response = Yii::$app->response;
@@ -141,7 +144,8 @@ class TaskController extends Controller
             return;
         }
 
-        $userid = UserManager::getUserByMobile($mobile)->getId();
+//        $userid = UserManager::getUserByMobile($mobile)->getId();
+
 
 //        $task = TaskManager::getTaskById($taskid);
 //        $question_meta = QuestionManager::getQuestionMetaByTaskid($taskid);
@@ -156,7 +160,14 @@ class TaskController extends Controller
             return;
         }
 
-        $answers = json_decode($answers, true);
+//        Yii::warning($answers);
+//        Yii::warning("wwwwwwww\n");
+//        Yii::warning($answers[0]);
+//        Yii::warning("wwwwwwww\n");
+//        Yii::warning($answers[1]);
+//        Yii::warning("wwwwwwww\n");
+//        Yii::warning($answers[2]);
+////        $answers = json_decode($answers, true);
         if ($answers == null || $answers == "[]") {
             $response = Yii::$app->response;
             $response->setStatusCode(200);
