@@ -170,6 +170,7 @@ class LabelManager
         curl_close($ch_to_get);
 
         $ret_data = json_decode($ret_str);
+        $ret_data = $ret_data->Label;
 
         for ($i = 0; $i < sizeof($ret_data); $i ++) {
             $label_content_entry = new Label($ret_data[$i]->id, $ret_data[$i]->taskid, $ret_data[$i]->dataid, $ret_data[$i]->result,

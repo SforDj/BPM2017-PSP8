@@ -143,6 +143,9 @@ class TaskController extends Controller
                     "meta"=>$label_meta,
                     "contents"=>$label_contents
                 ), JSON_UNESCAPED_UNICODE);
+
+
+
                 $response = Yii::$app->response;
                 $response->setStatusCode(200);
                 $response->content = $ret_data;
