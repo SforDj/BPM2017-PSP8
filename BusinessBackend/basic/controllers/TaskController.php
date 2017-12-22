@@ -244,7 +244,7 @@ class TaskController extends Controller
     }
 
 
-    public function actionSumbitLabel() {
+    public function actionSubmitLabel() {
         $request = Yii::$app->request;
         $taskid = null;
         $userid = null;
@@ -283,7 +283,7 @@ class TaskController extends Controller
             return;
         }
 
-        $answers = json_decode($answers, true);
+//        $answers = json_decode($answers, true);
         if ($answers == null || $answers == "[]") {
             $response = Yii::$app->response;
             $response->setStatusCode(200);
