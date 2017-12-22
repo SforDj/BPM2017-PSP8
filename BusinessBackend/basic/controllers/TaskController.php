@@ -251,6 +251,9 @@ class TaskController extends Controller
         $answers = null;
         $mobile = null;
 
+        Yii::warning("***********************************************************************************8\n");
+        Yii::warning($request->getRawBody());
+
         if ($request->isPost) {
             $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);

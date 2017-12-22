@@ -175,6 +175,8 @@ class LabelManager
         for ($i = 0; $i < sizeof($ret_data); $i ++) {
             $label_content_entry = new Label($ret_data[$i]->id, $ret_data[$i]->taskid, $ret_data[$i]->dataid, $ret_data[$i]->result,
                 $ret_data[$i]->userid, $ret_data[$i]->content);
+            if($label_content_entry->getResult() != "")
+                continue;
             array_push($labels_content, $label_content_entry);
         }
 
