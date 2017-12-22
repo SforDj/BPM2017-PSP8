@@ -37,12 +37,17 @@ class TaskController extends Controller
 {
     public function actionGetAllTasks() {
         $request = Yii::$app->request;
+        $mobile = null;
+
         if(!$request->isGet) {
             $response = Yii::$app->response;
             $response->setStatusCode(200);
             $response->content = "Wrong Request Type.";
             $response->send();
             return;
+        }
+        else {
+            $mobile =$request->get("mobile");
         }
 
         $tasks = TaskManager::getAllTasks();
