@@ -185,7 +185,7 @@ class LabelManager
 
     public static function receiveAnswer($taskid, $userid, array $answers) {
         $label_entrys = self::getLabelContentsByTaskidAndUserid($taskid, $userid);
-        self::labelSort($question_entrys);
+        self::labelSort($label_entrys);
 
         for ($i = 0; $i < sizeof($answers); $i ++){
 //            $label_index = $label_entrys[$i]->getDataid();
