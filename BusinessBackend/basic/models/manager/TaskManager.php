@@ -380,6 +380,27 @@ class TaskManager
         return $str_encoded;
     }
 
+    public static function taskArray_to_array(array $tasks, array $remains){
+        $ret = array();
+        for ($i = 0; $i < sizeof($tasks); $i ++) {
+            $task = $tasks[$i];
+            $ret_entry = array(
+                "id" => $task->getId(),
+                "name" => $task->getName(),
+                "description" => $task->getDescription(),
+                "progress" => $task->getProgress(),
+                "type" => $task->getType(),
+                "rewardtype" => $task->getRewardtype(),
+                "reward" => $task->getReward(),
+                "state" => $task->getState(),
+                "remain" => $task->getRemain(),
+                "count_remain" => $remains[$i]
+            );
+            array_push($ret, $ret_entry);
+        }
+        return $ret;
+    }
+
 
     public static function task_to_array(Task $task){
         $ret = array(
@@ -409,7 +430,7 @@ class TaskManager
     }
 
     public static function taskitemArray_to_array(array $taskitems){
-        $ret = null;
+        $ret = array();
         foreach ($taskitems as $entry) {
             $ret_entry = array(
                 "id" => $entry->getId(),

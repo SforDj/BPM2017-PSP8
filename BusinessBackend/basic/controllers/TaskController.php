@@ -51,12 +51,33 @@ class TaskController extends Controller
         }
 
         $tasks = TaskManager::getAllTasks();
-        $tasks_encoded = TaskManager::encodeTasks($tasks);
+
+        $count_remain = array();
+        foreach ($tasks as $task) {
+            $taskid = $task->getId();
+            $type = $task->getType;
+            switch ($type) {
+                case 0:
+                    $r = QuestionManager::getQuestionMetaByTaskid($taskid)->getRemain();
+                    array_push($count_remain, $r);
+                    break;
+                case 1:
+                    $r = LabelManager::getLabelMetaByTaskid($taskid)->getCount() - LabelManager::getLabelMetaByTaskid($taskid)->getRemain();
+                    array_push($count_remain, $r);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        $tasks_encoded = TaskManager::taskArray_to_array($tasks, $count_remain);
         $response = Yii::$app->response;
         $response->setStatusCode(200);
         $response->content = $tasks_encoded;
         $response->send();
     }
+
 
     public function actionGetTaskContent() {
         $request = Yii::$app->request;
