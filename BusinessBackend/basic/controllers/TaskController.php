@@ -312,17 +312,17 @@ class TaskController extends Controller
         $assign_count = null;
 
         if($request->isGet) {
-            $taskid = $request->get("taskid");
-            $mobile = $request->get("mobile");
-            $assign_count = $request->get("assign_count");
+            $taskid = intval($request->get("taskid"));
+            $mobile = intval($request->get("mobile"));
+            $assign_count = intval($request->get("assign_count"));
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);
             $params = json_decode($body);
-            $taskid = $params->taskid;
-            $mobile = $params->mobile;
-            $assign_count = $params->assign_count;
+            $taskid = intval($params->taskid);
+            $mobile = intval($params->mobile);
+            $assign_count = intval($params->assign_count);
         } else {
             $response = Yii::$app->response;
             $response->setStatusCode(200);
