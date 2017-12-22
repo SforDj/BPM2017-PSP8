@@ -301,7 +301,12 @@ class TaskController extends Controller
         $type = null;
         $assign_count = null;
 
-        if ($request->isPost) {
+        if($request->isGet) {
+            $taskid = $request->get("taskid");
+            $mobile = $request->get("mobile");
+            $assign_count = $request->get("assign_count");
+        }
+        elseif ($request->isPost) {
             $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);
             $params = json_decode($body);
