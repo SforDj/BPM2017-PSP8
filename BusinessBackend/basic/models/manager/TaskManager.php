@@ -159,6 +159,9 @@ class TaskManager
         $ret_str = curl_exec($ch_to_get);
         curl_close($ch_to_get);
 
+        if($ret_str == "{}")
+            return $taskitems;
+
         $ret_data = json_decode($ret_str);
         $ret_data = $ret_data->Taskitem;
 
@@ -222,9 +225,13 @@ class TaskManager
         $ret_str = curl_exec($ch_to_get);
         curl_close($ch_to_get);
 
+        $tasks = array();
+        if($ret_str == "{}")
+            return $tasks;
+
         $ret_data = json_decode($ret_str);
 
-        $tasks = array();
+
 
         for ($i = 0; $i < sizeof($ret_data->Task);$i ++) {
             $d = $ret_data->Task[$i];
