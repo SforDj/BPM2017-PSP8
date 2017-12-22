@@ -55,7 +55,7 @@ class TaskController extends Controller
         $count_remain = array();
         foreach ($tasks as $task) {
             $taskid = $task->getId();
-            $type = $task->getType;
+            $type = $task->getType();
             switch ($type) {
                 case 0:
                     $r = QuestionManager::getQuestionMetaByTaskid($taskid)->getRemain();
