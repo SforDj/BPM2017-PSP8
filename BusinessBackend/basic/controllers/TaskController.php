@@ -316,6 +316,15 @@ class TaskController extends Controller
             return;
         }
 
+        if($mobile == null || $taskid == null || $assign_count == null) {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "CZHDSB.";
+            $response->send();
+            return;
+        }
+
+
         $userid = UserManager::getUserByMobile($mobile)->getId();
 
         $type = TaskManager::getTaskById($taskid)->getType();
