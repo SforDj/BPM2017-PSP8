@@ -104,10 +104,10 @@ class TaskManager
         $ret_str = curl_exec($ch_to_get);
         curl_close($ch_to_get);
 
-        $ret_data = json_decode($ret_str);
-
-        if($ret_data == "[]")
+        if($ret_str == "[]")
             return $taskitems;
+
+        $ret_data = json_decode($ret_str);
 
         $ret_data = $ret_data->Taskitem;
 
