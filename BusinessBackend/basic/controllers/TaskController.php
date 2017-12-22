@@ -173,8 +173,8 @@ class TaskController extends Controller
             $body = stripslashes($body);
             $params = json_decode($body);
             $taskid = $params->taskid;
-//            $mobile = $params->mobile;
-            $userid = $params->userid;
+            $mobile = $params->mobile;
+//            $userid = $params->userid;
             $answers = $params->answers;
         } else {
             $response = Yii::$app->response;
@@ -184,7 +184,17 @@ class TaskController extends Controller
             return;
         }
 
-//        $userid = UserManager::getUserByMobile($mobile)->getId();
+        if($mobile == null || $taskid == null) {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "CZHDSB.";
+            $response->send();
+            return;
+        }
+
+
+
+        $userid = UserManager::getUserByMobile($mobile)->getId();
 
 
 //        $task = TaskManager::getTaskById($taskid);
