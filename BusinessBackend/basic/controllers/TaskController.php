@@ -49,6 +49,13 @@ class TaskController extends Controller
         else {
             $mobile =$request->get("mobile");
         }
+        if($mobile == null) {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "CZHSB.";
+            $response->send();
+        }
+
 
         $tasks = TaskManager::getAllTasks();
 
