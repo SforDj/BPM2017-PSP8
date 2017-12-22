@@ -56,15 +56,18 @@ class TaskController extends Controller
     public function actionGetTaskContent() {
         $request = Yii::$app->request;
         $taskid = null;
+        $mobile = null;
 
         if($request->isGet) {
             $taskid = $request->get("id");
+            $mobile = $request->get("mobile");
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $params = json_decode($body);
             $taskid = $params->taskid;
+            $mobile = $params->mobile;
         }
         else {
             $response = Yii::$app->response;
@@ -76,6 +79,7 @@ class TaskController extends Controller
 
         $task = TaskManager::getTaskById($taskid);
         $type = $task->getType();
+        $userid = UserManager::getUserByMobile($mobile)->getId();
 
         switch ($type) {
             case 0:
@@ -97,7 +101,7 @@ class TaskController extends Controller
                 $label_meta = LabelManager::getLabelMetaByTaskid($taskid);
                 $label_meta = LabelManager::labelques_to_array($label_meta);
 
-                $label_contents = LabelManager::getLabelContentsByTaskid($taskid);
+                $label_contents = LabelManager::getLabelContentsByTaskidAndUserid($taskid, $userid);
                 $label_contents = LabelManager::labeLArray_to_array($label_contents);
                 $ret_data = json_encode(array(
                     "meta"=>$label_meta,

@@ -185,8 +185,8 @@ class LabelManager
         self::labelSort($question_entrys);
 
         for ($i = 0; $i < sizeof($answers); $i ++){
-            $label_index = $label_entrys[$i]->getDataid();
-            $answer = $answers[$label_index];
+//            $label_index = $label_entrys[$i]->getDataid();
+            $answer = $answers[$i];
             $label_entrys[$i]->setResult($answer);
         }
 
