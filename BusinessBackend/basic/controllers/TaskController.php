@@ -47,7 +47,7 @@ class TaskController extends Controller
             return;
         }
         else {
-            $mobile =$request->get("mobile");
+            $mobile =intval($request->get("mobile"));
         }
         if($mobile == null) {
             $response = Yii::$app->response;
@@ -95,15 +95,15 @@ class TaskController extends Controller
         $mobile = null;
 
         if($request->isGet) {
-            $taskid = $request->get("id");
-            $mobile = $request->get("mobile");
+            $taskid = intval($request->get("id"));
+            $mobile = intval($request->get("mobile"));
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $params = json_decode($body);
-            $taskid = $params->taskid;
-            $mobile = $params->mobile;
+            $taskid = intval($params->taskid);
+            $mobile = intval($params->mobile);
         }
         else {
             $response = Yii::$app->response;
@@ -172,8 +172,8 @@ class TaskController extends Controller
             $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);
             $params = json_decode($body);
-            $taskid = $params->taskid;
-            $mobile = $params->mobile;
+            $taskid = intval($params->taskid);
+            $mobile = intval($params->mobile);
 //            $userid = $params->userid;
             $answers = $params->answers;
         } else {
@@ -252,8 +252,8 @@ class TaskController extends Controller
             $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);
             $params = json_decode($body);
-            $taskid = $params->taskid;
-            $mobile = $params->mobile;
+            $taskid = intval($params->taskid);
+            $mobile = intval($params->mobile);
             $answers = $params->answers;
         } else {
             $response = Yii::$app->response;

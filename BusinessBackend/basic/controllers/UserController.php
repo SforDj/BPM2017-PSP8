@@ -28,13 +28,13 @@ class UserController extends Controller
         $request = Yii::$app->request;
         $mobile = null;
         if ($request->isGet) {
-            $mobile = $request->get("mobile");
+            $mobile = intval($request->get("mobile"));
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $param = json_decode($body);
-            $mobile = $param->mobile;
+            $mobile = intval($param->mobile);
         }
         else {
             $response = Yii::$app->response;
@@ -74,8 +74,8 @@ class UserController extends Controller
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $params = json_decode($body);
-            $mobile = $params->mobile;
-            $traffic = $params->traffic;
+            $mobile = intval($params->mobile);
+            $traffic = doubleval($params->traffic);
         }
         else {
             $response = Yii::$app->response;
@@ -114,8 +114,8 @@ class UserController extends Controller
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $params = json_decode($body);
-            $mobile = $params->mobile;
-            $traffic = $params->traffic;
+            $mobile = intval($params->mobile);
+            $traffic = doubleval($params->traffic);
         }
         else {
             $response = Yii::$app->response;
@@ -156,9 +156,9 @@ class UserController extends Controller
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $params = json_decode($body);
-            $rewardtype = $params->rewardtype;
-            $reward = $params->reward;
-            $mobile = $params->mobile;
+            $rewardtype = intval($params->rewardtype);
+            $reward = doubleval($params->reward);
+            $mobile = intval($params->mobile);
         }
         $user = UserManager::getUserByMobile($mobile);
 

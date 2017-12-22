@@ -43,13 +43,13 @@ class CenterController extends Controller
         $request = Yii::$app->request;
         $mobile = null;
         if ($request->isGet) {
-            $mobile = $request->get("mobile");
+            $mobile = intval($request->get("mobile"));
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $param = json_decode($body);
-            $mobile = $param->mobile;
+            $mobile = intval($param->mobile);
         }
         else {
             $response = Yii::$app->response;
@@ -85,15 +85,15 @@ class CenterController extends Controller
         $mobile = null;
         $state = null;
         if ($request->isGet) {
-            $mobile = $request->get("mobile");
-            $state = $request->get("state");
+            $mobile = intval($request->get("mobile"));
+            $state = intval($request->get("state"));
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $param = json_decode($body);
-            $mobile = $param->mobile;
-            $state = $param->state;
+            $mobile = intval($param->mobile);
+            $state = intval($param->state);
         }
         else {
             $response = Yii::$app->response;
@@ -129,13 +129,13 @@ class CenterController extends Controller
         $request = Yii::$app->request;
         $taskitemid = null;
         if ($request->isGet) {
-            $taskitemid = $request->get("taskitemid");
+            $taskitemid = intval($request->get("taskitemid"));
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $param = json_decode($body);
-            $taskitemid = $param->taskitemid;
+            $taskitemid = intval($param->taskitemid);
         }
         else {
             $response = Yii::$app->response;
@@ -202,7 +202,7 @@ class CenterController extends Controller
                             $body = trim($request->getRawBody(), '"');
                             $body = stripslashes($body);
                             $param = json_decode($body);
-                            $reward = $param->reward;
+                            $reward = doubleval($param->reward);
                         }
                         else
                             $reward = 0;
@@ -294,7 +294,7 @@ class CenterController extends Controller
                             $body = trim($request->getRawBody(), '"');
                             $body = stripslashes($body);
                             $param = json_decode($body);
-                            $reward = $param->reward;
+                            $reward = doubleval($param->reward);
                         }
                         else
                             $reward = 0;
