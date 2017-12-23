@@ -237,6 +237,7 @@ class CenterController extends Controller
                         $ratio = ($rangeend - $rangestart) * 1.0 / $total;
                         $reward = $reward * $ratio;
                         UserManager::addAsset($user, $reward, 0, 0);
+                        TaskManager::substractReward($task, $reward);
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
@@ -256,6 +257,7 @@ class CenterController extends Controller
                         $ratio = ($rangeend - $rangestart) * 1.0 / $total;
                         $reward = $reward * $ratio;
                         UserManager::addAsset($user, 0, $reward, 0);
+                        TaskManager::substractReward($task, $reward);
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
@@ -275,6 +277,7 @@ class CenterController extends Controller
                         $ratio = ($rangeend - $rangestart) * 1.0 / $total;
                         $reward = $reward * $ratio;
                         UserManager::addAsset($user, 0, 0, $reward);
+                        TaskManager::substractReward($task, $reward);
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
@@ -299,7 +302,8 @@ class CenterController extends Controller
                             $reward = 0;
 
                         UserManager::addAsset($user, 0, 0, $reward);
-                        TaskManager::userFinishTaskitem($taskitem);
+                        TaskManager::substractReward($task, $reward);
+                        TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
                         $response = Yii::$app->response;
