@@ -338,5 +338,42 @@ class CenterController extends Controller
         }
     }
 
+    public function actionAddTraffic() {
+        $request = Yii::$app->request;
+        $mobile = null;
+        $traffic = null;
+        if ($request->isGet) {
+            $mobile = intval($request->get("mobile"));
+            $traffic = doubleval($request->get("traffic"));
+        }
+        elseif ($request->isPost) {
+            $body = trim($request->getRawBody(),'"');
+            $body = stripslashes($body);
+            $param = json_decode($body);
+            $mobile = intval($param->mobile);
+            $traffic = doubleval($param->traffic);
+        }
+        else {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Request Type.";
+            $response->send();
+            return;
+        }
+
+        $user = UserManager::getUserByMobile($mobile);
+        UserManager::addAsset($user, $traffic, 0, 0);
+        UserManager::updateUser($user);
+
+        $response = Yii::$app->response;
+        $response->setStatusCode(200);
+        $response->content = json_encode(array(
+            "state" => 1
+        ));
+        $response->send();
+
+    }
+
+
 
 }
