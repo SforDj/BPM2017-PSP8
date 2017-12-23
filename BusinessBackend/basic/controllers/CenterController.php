@@ -160,6 +160,7 @@ class CenterController extends Controller
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
+                        TaskManager::updateTaskitem($task);
                         $response = Yii::$app->response;
                         $response->setStatusCode(200);
                         $response->content = json_encode(array(
@@ -173,6 +174,7 @@ class CenterController extends Controller
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
+                        TaskManager::updateTaskitem($task);
                         $response = Yii::$app->response;
                         $response->setStatusCode(200);
                         $response->content = json_encode(array(
@@ -186,6 +188,7 @@ class CenterController extends Controller
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
+                        TaskManager::updateTaskitem($task);
                         $response = Yii::$app->response;
                         $response->setStatusCode(200);
                         $response->content = json_encode(array(
@@ -210,6 +213,7 @@ class CenterController extends Controller
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
+                        TaskManager::updateTaskitem($task);
                         $response = Yii::$app->response;
                         $response->setStatusCode(200);
                         $response->content = json_encode(array(
@@ -241,6 +245,7 @@ class CenterController extends Controller
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
+                        TaskManager::updateTaskitem($task);
                         $response = Yii::$app->response;
                         $response->setStatusCode(200);
                         $response->content = json_encode(array(
@@ -261,6 +266,7 @@ class CenterController extends Controller
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
+                        TaskManager::updateTaskitem($task);
                         $response = Yii::$app->response;
                         $response->setStatusCode(200);
                         $response->content = json_encode(array(
@@ -281,6 +287,7 @@ class CenterController extends Controller
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
+                        TaskManager::updateTaskitem($task);
                         $response = Yii::$app->response;
                         $response->setStatusCode(200);
                         $response->content = json_encode(array(
@@ -306,6 +313,7 @@ class CenterController extends Controller
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
+                        TaskManager::updateTaskitem($task);
                         $response = Yii::$app->response;
                         $response->setStatusCode(200);
                         $response->content = json_encode(array(
