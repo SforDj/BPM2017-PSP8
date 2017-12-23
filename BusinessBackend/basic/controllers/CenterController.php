@@ -346,24 +346,21 @@ class CenterController extends Controller
         $cash = 0;
         if ($request->isGet) {
             $mobile = intval($request->get("mobile"));
-            if ($request->get("traffic"))
-                $traffic = doubleval($request->get("traffic"));
-            if ($request->get("telefee"))
-                $telefee = doubleval($request->get("telefee"));
-            if ($request->get("cash"))
-                $cash = doubleval($request->get("cash"));
+            $traffic = doubleval($request->get("traffic"));
+
+            $telefee = doubleval($request->get("telefee"));
+
+            $cash = doubleval($request->get("cash"));
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
             $body = stripslashes($body);
             $param = json_decode($body);
             $mobile = intval($param->mobile);
-            if ($param->traffic)
-                $traffic = doubleval($param->traffic);
-            if ($param->telefee)
-                $telefee = doubleval($param->telefee);
-            if ($param->cash)
-                $cash = doubleval($param->cash);
+
+            $traffic = doubleval($param->traffic);
+            $telefee = doubleval($param->telefee);
+            $cash = doubleval($param->cash);
         }
         else {
             $response = Yii::$app->response;
