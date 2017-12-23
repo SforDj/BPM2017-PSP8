@@ -462,6 +462,10 @@ class TaskManager
 
     public static function taskitemAndTaskArray_to_array(array $taskitems, array $task_array){
         $ret = array();
+
+        if (sizeof($taskitems) != sizeof($task_array))
+            return $ret;
+
         for ($i = 0; $i < sizeof($taskitems); $i ++) {
             $entry = $taskitems[$i];
             $task_entry = $task_array[$i];
@@ -480,10 +484,11 @@ class TaskManager
                 "rewardtype" => $task_entry->getRewardtype(),
                 "reward" => $task_entry->getReward(),
                 "state" => $task_entry->getState(),
-                "remain" => $task_entry->getRemain(),
+                "remain" => $task_entry->getRemain()
             );
             array_push($ret, $ret_entry);
         }
+
         return $ret;
     }
 

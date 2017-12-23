@@ -109,7 +109,7 @@ class CenterController extends Controller
         foreach ($taskitems as $taskitem) {
             $taskid = $taskitem->getTaskid();
             $task = TaskManager::getTaskById($taskid);
-            $task = TaskManager::task_to_array($task);
+//            $task = TaskManager::task_to_array($task);
             array_push($task_array, $task);
         }
         $taskitems = TaskManager::taskitemAndTaskArray_to_array($taskitems, $task_array);
