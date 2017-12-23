@@ -460,7 +460,32 @@ class TaskManager
     }
 
 
-
+    public static function taskitemAndTaskArray_to_array(array $taskitems, array $task_array){
+        $ret = array();
+        for ($i = 0; $i < sizeof($taskitems); $i ++) {
+            $entry = $taskitems[$i];
+            $task_entry = $task_array[$i];
+            $ret_entry = array(
+                "taskitemid" => $entry->getId(),
+                "taskid" => $entry->getTaskid(),
+                "userid" => $entry->getUserid(),
+                "rangestart" => $entry->getRangestart(),
+                "rangeend" => $entry->getRangeend(),
+                "taskitem_state" => $entry->getState(),
+                "id" => $task_entry->getId(),
+                "name" => $task_entry->getName(),
+                "description" => $task_entry->getDescription(),
+                "progress" => $task_entry->getProgress(),
+                "type" => $task_entry->getType(),
+                "rewardtype" => $task_entry->getRewardtype(),
+                "reward" => $task_entry->getReward(),
+                "state" => $task_entry->getState(),
+                "remain" => $task_entry->getRemain(),
+            );
+            array_push($ret, $ret_entry);
+        }
+        return $ret;
+    }
 
 
 

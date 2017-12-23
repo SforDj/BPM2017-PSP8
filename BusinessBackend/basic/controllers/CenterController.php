@@ -112,10 +112,9 @@ class CenterController extends Controller
             $task = TaskManager::task_to_array($task);
             array_push($task_array, $task);
         }
-        $taskitems = TaskManager::taskitemArray_to_array($taskitems);
+        $taskitems = TaskManager::taskitemAndTaskArray_to_array($taskitems, $task_array);
         $ret_data = json_encode(array(
-            "taskitem"=>$taskitems,
-            "task"=>$task_array
+            "taskitem"=>$taskitems
         ), JSON_UNESCAPED_UNICODE);
 
         $response = Yii::$app->response;
