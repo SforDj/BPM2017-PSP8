@@ -341,10 +341,14 @@ class CenterController extends Controller
     public function actionAddTraffic() {
         $request = Yii::$app->request;
         $mobile = null;
-        $traffic = null;
+        $traffic = 0;
+        $telefee = 0;
+        $cash = 0;
         if ($request->isGet) {
             $mobile = intval($request->get("mobile"));
             $traffic = doubleval($request->get("traffic"));
+            $telefee = doubleval($request->get("telefee"));
+            $cash = doubleval($request->get("cash"));
         }
         elseif ($request->isPost) {
             $body = trim($request->getRawBody(),'"');
@@ -352,6 +356,8 @@ class CenterController extends Controller
             $param = json_decode($body);
             $mobile = intval($param->mobile);
             $traffic = doubleval($param->traffic);
+            $telefee = doubleval($param->telefee);
+            $cash = doubleval($param->cash);
         }
         else {
             $response = Yii::$app->response;
@@ -361,8 +367,16 @@ class CenterController extends Controller
             return;
         }
 
+        if ($mobile == null) {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "No mobile.";
+            $response->send();
+        }
+
+
         $user = UserManager::getUserByMobile($mobile);
-        UserManager::addAsset($user, $traffic, 0, 0);
+        UserManager::addAsset($user, $traffic, $telefee, $cash);
         UserManager::updateUser($user);
 
         $response = Yii::$app->response;
