@@ -251,6 +251,7 @@ class CenterController extends Controller
                             $reward = 0;
 
                         UserManager::addAsset($user, 0, 0, $reward);
+                        TaskManager::substractReward($task, $reward);
                         TaskManager::rewardGotTaskitem($taskitem);
                         UserManager::updateUser($user);
                         TaskManager::updateTaskitem($taskitem);
