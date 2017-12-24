@@ -124,6 +124,47 @@ class CenterController extends Controller
         return;
     }
 
+    public function actionGetMyTaskitemByState() {
+        $request = Yii::$app->request;
+        $state = null;
+        if ($request->isGet) {
+            $state = intval($request->get("state"));
+        }
+        elseif ($request->isPost) {
+            $body = trim($request->getRawBody(),'"');
+            $body = stripslashes($body);
+            $param = json_decode($body);
+            $state = intval($param->state);
+        }
+        else {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Request Type.";
+            $response->send();
+            return;
+        }
+
+        $taskitems = TaskManager::getTaskitemByState($state);
+        $task_array = array();
+        foreach ($taskitems as $taskitem) {
+            $taskid = $taskitem->getTaskid();
+            $task = TaskManager::getTaskById($taskid);
+//            $task = TaskManager::task_to_array($task);
+            array_push($task_array, $task);
+        }
+        $taskitems = TaskManager::taskitemAndTaskArray_to_array($taskitems, $task_array);
+        $ret_data = json_encode(array(
+            "taskitem"=>$taskitems
+        ), JSON_UNESCAPED_UNICODE);
+
+        $response = Yii::$app->response;
+        $response->setStatusCode(200);
+        $response->content = $ret_data;
+        $response->send();
+        return;
+    }
+
+
     public function actionGetReward() {
         $request = Yii::$app->request;
         $taskitemid = null;

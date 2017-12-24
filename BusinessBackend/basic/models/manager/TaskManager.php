@@ -147,6 +147,31 @@ class TaskManager
     }
 
 
+    public static function getTaskitemByState($state) {
+        $taskitems = array();
+        $url = self::$item_basic_url . "?Taskitem.state=" . $state;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+        if($ret_str == "{}")
+            return $taskitems;
+
+        $ret_data = json_decode($ret_str);
+
+        for ($i = 0; $i < sizeof($ret_data); $i ++) {
+            $data = $ret_data[$i];
+            $taskitem = new Taskitem($data->id, $data->taskid, $data->userid, $data->rangestart, $data->rangeend,
+                $data->state);
+            array_push($taskitems, $taskitem);
+        }
+
+        return $taskitems;
+    }
+
 
     public static function getTaskitemByTaskidAndUserid($taskid, $userid) {
         $taskitems = array();
