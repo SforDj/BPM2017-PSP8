@@ -433,5 +433,36 @@ class CenterController extends Controller
     }
 
 
+    public function actionApprove() {
+        $request = Yii::$app->request;
+        $taskitemid = null;
+        if ($request->isGet) {
+            $taskitemid = $request->get("taskitemid");
+        }
+        elseif ($request->isPost) {
+            $body = trim($request->getRawBody(),'"');
+            $body = stripslashes($body);
+            $param = json_decode($body);
+            $taskitemid = $param->taskitemid;
+        }
+        else {
+            $response = Yii::$app->response;
+            $response->setStatusCode(200);
+            $response->content = "Wrong Request Type.";
+            $response->send();
+            return;
+        }
+
+        $taskitem = TaskManager::getTaskitemById($taskitemid);
+        TaskManager::adminCheckTaskitem($taskitem);
+
+        TaskManager::updateTaskitem($taskitem);
+        $response = Yii::$app->response;
+        $response->setStatusCode(200);
+        $response->content = json_encode(array(
+            "state" => 1
+        ));
+        $response->send();
+    }
 
 }
