@@ -239,7 +239,7 @@ class CenterController extends Controller
                         return;
                     case 3:
                         if ($request->isGet) {
-                            $reward = $request->get("reward");
+                            $reward = doubleval($request->get("reward"));
                         }
                         elseif ($request->isPost) {
                             $body = trim($request->getRawBody(), '"');
@@ -338,7 +338,7 @@ class CenterController extends Controller
                         return;
                     case 3:
                         if ($request->isGet) {
-                            $reward = $request->get("reward");
+                            $reward = doubleval($request->get("reward"));
                         }
                         elseif ($request->isPost) {
                             $body = trim($request->getRawBody(), '"');
