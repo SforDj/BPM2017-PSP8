@@ -58,10 +58,16 @@ class UserController extends Controller
         }
         UserManager::inactiveUser($user);
         $user = UserManager::updateUser($user);
+
+
         $user_json = UserManager::encodeUser($user);
+
+        Yii::warning($user_json);
         $response = Yii::$app->response;
         $response->setStatusCode(200);
         $response->content = $user_json;
+
+        Yii::warning($response->content);
         $response->send();
 
     }

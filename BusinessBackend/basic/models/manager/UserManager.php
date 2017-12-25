@@ -37,7 +37,6 @@ class UserManager
         curl_close($ch_to_create);
 
         $ret_data = json_decode($ret_str);
-        echo $ret_str;
         $user = new User($ret_data->id, $ret_data->mobile, $ret_data->traffic, $ret_data->telefee, $ret_data->cash,
             $ret_data->active, $ret_data->tradelay);
 
