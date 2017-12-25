@@ -77,10 +77,10 @@ class TaskController extends Controller
             }
         }
 
+        $n = 3;
 
         $tasks_encoded = json_encode(array(
-            "Task"=>TaskManager::taskArray_to_array($tasks, $count_remain),
-            "n"=>3,
+            "Task"=>TaskManager::taskArray_to_array($tasks, $count_remain, $n)
             )
         );
         $response = Yii::$app->response;

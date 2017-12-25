@@ -424,9 +424,14 @@ class TaskManager
         return $str_encoded;
     }
 
-    public static function taskArray_to_array(array $tasks, array $remains){
+    public static function taskArray_to_array(array $tasks, array $remains, $n){
         $ret = array();
         for ($i = 0; $i < sizeof($tasks); $i ++) {
+            $recommend = 0;
+            if($i < $n) {
+                $recommend = 1;
+            }
+
             $task = $tasks[$i];
             $ret_entry = array(
                 "id" => $task->getId(),
@@ -438,7 +443,8 @@ class TaskManager
                 "reward" => $task->getReward(),
                 "state" => $task->getState(),
                 "remain" => $task->getRemain(),
-                "count_remain" => $remains[$i]
+                "count_remain" => $remains[$i],
+                "recommend" => $recommend
             );
             array_push($ret, $ret_entry);
         }
