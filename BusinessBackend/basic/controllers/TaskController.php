@@ -56,8 +56,17 @@ class TaskController extends Controller
             $response->send();
         }
 
+        $userid = UserManager::getUserByMobile($mobile)->getId();
+        $taskitems = TaskManager::getTaskitemByUserid($userid);
+
+
+
+        $recommand_ids = TaskManager::getSecretFromTaskitems($taskitems);
 
         $tasks = TaskManager::getAllTasks();
+
+        $tasks = TaskManager::resort($tasks, $recommand_ids);
+
 
         $count_remain = array();
         foreach ($tasks as $task) {
@@ -77,11 +86,11 @@ class TaskController extends Controller
             }
         }
 
-        $n = 3;
+        $n = sizeof($recommand_ids);
 
         $tasks_encoded = json_encode(array(
             "Task"=>TaskManager::taskArray_to_array($tasks, $count_remain, $n)
-            )
+            ), JSON_UNESCAPED_UNICODE
         );
         $response = Yii::$app->response;
         $response->setStatusCode(200);

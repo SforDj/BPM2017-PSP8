@@ -10,6 +10,7 @@ class TaskManager
 {
     public static $basic_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/Task/";
     public static $item_basic_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/Taskitem/";
+    public static $secret_basic_url = "http://120.79.42.137:8080/Entity/U1b73d91e189ed5/PSP8/Secret/";
 
     public static function createTask($name, $description, $type, $reward_type, $reward) {
 
@@ -47,6 +48,91 @@ class TaskManager
         return $task;
     }
 
+    public static function getSecretFromTaskitems(array $taskitems) {
+        $url = self::$secret_basic_url;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+
+        $ret_data = json_decode($ret_str)->Secret;
+
+//        Yii::warning("1213333333333333333333333333333333333333333333333333333333333333333");
+//        Yii::warning($taskitems);
+//        Yii::warning(sizeof($taskitems));
+
+
+        $keys = array();
+        for ($i = 0; $i < sizeof($ret_data); $i ++) {
+            array_push($keys, $ret_data[$i]->key);
+        }
+
+
+        $has = array();
+        foreach ($taskitems as $taskitem) {
+            $name = self::getTaskById($taskitem->getTaskid())->getName();
+
+//            Yii::warning("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+//            Yii::warning($name);
+//            Yii::warning("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc");
+//            Yii::warning(strpos($name, "豆") !== false);
+
+
+            if(strpos($name, "豆") !== false && in_array("纳豆", $has) == false) {
+                array_push($has, "纳豆");
+            }
+            elseif (strpos($name, "主播") !== false && in_array("主播", $has) == false) {
+                array_push($has, "主播");
+            }
+            elseif (strpos($name, "球") !== false && in_array("球类", $has) == false) {
+                array_push($has, "球类");
+            }
+            elseif ((strpos($name, "歌") !== false || strpos($name, "电影") !== false) && in_array("音乐", $has) == false) {
+                array_push($has, "音乐");
+            }
+            elseif(sizeof($ret_data) >= 3 && in_array($keys[4], $has)) {
+                array_push($has, $keys[4]);
+            }
+        }
+
+
+
+
+        $taskids = array();
+
+        for ($i = 0; $i < sizeof($ret_data); $i ++) {
+            for ($j = 0; $j < sizeof($has); $j ++) {
+                if ($has[$j] == $ret_data[$i]->key) {
+                    $id_array = explode(',', $ret_data[$i]->value);
+                    foreach ($id_array as $id) {
+                        array_push($taskids, intval($id));
+                    }
+                }
+            }
+        }
+
+
+        return $taskids;
+
+    }
+
+    public static function resort(array $tasks, array $recommand_ids) {
+        $ret_array = array();
+
+        foreach ($tasks as $task) {
+            if (in_array($task->getId(), $recommand_ids)) {
+                array_unshift($ret_array, $task);
+            }
+            else {
+                array_push($ret_array, $task);
+            }
+        }
+
+        return $ret_array;
+    }
 
     public static function createTaskItem($taskid, $userid, $rangestart, $rangeend) {
 
@@ -120,6 +206,40 @@ class TaskManager
 
         return $taskitems;
     }
+
+    public static function getTaskitemByUserid($userid) {
+        $taskitems = array();
+        $url = self::$item_basic_url . "?Taskitem.userid=" . $userid;
+        $ch_to_get = curl_init();
+        curl_setopt($ch_to_get, CURLOPT_URL, $url);
+        curl_setopt($ch_to_get, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_to_get, CURLOPT_HEADER, 0);
+
+        $ret_str = curl_exec($ch_to_get);
+        curl_close($ch_to_get);
+
+        if($ret_str == "{}")
+            return $taskitems;
+
+        $ret_data = json_decode($ret_str);
+
+        $ret_data = $ret_data->Taskitem;
+
+
+        for ($i = 0; $i < sizeof($ret_data); $i ++) {
+            $data = $ret_data[$i];
+
+
+            $taskitem = new Taskitem($data->id, $data->taskid, $data->userid, $data->rangestart, $data->rangeend,
+                $data->state);
+            array_push($taskitems, $taskitem);
+
+        }
+
+        return $taskitems;
+    }
+
+
 
     public static function getTaskitemByTaskidAndState($taskid, $state) {
         $taskitems = array();
