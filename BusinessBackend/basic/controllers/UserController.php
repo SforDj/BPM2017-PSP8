@@ -29,14 +29,12 @@ class UserController extends Controller
         $mobile = null;
         if ($request->isGet) {
             $mobile = intval($request->get("mobile"));
-        }
-        elseif ($request->isPost) {
-            $body = trim($request->getRawBody(),'"');
+        } elseif ($request->isPost) {
+            $body = trim($request->getRawBody(), '"');
             $body = stripslashes($body);
             $param = json_decode($body);
             $mobile = intval($param->mobile);
-        }
-        else {
+        } else {
             $response = Yii::$app->response;
             $response->setStatusCode(200);
             $response->content = "Wrong Request Type.";
@@ -69,7 +67,6 @@ class UserController extends Controller
 
         Yii::warning($response->content);
         $response->send();
-
     }
 
     public function actionUpdateUserInfo() {
