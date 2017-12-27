@@ -84,8 +84,8 @@ class TaskManager
             if(strpos($name, "豆") !== false && in_array("纳豆", $has) == false) {
                 array_push($has, "纳豆");
             }
-            elseif (strpos($name, "主播") !== false && in_array("主播", $has) == false) {
-                array_push($has, "主播");
+            elseif (strpos($name, "主播") !== false && in_array("纳豆", $has) == false) {
+                array_push($has, "纳豆");
             }
             elseif (strpos($name, "球") !== false && in_array("球类", $has) == false) {
                 array_push($has, "球类");
@@ -93,7 +93,7 @@ class TaskManager
             elseif ((strpos($name, "歌") !== false || strpos($name, "电影") !== false) && in_array("音乐", $has) == false) {
                 array_push($has, "音乐");
             }
-            elseif(sizeof($ret_data) >= 3 && in_array($keys[4], $has)) {
+            elseif(sizeof($ret_data) >= 5 && in_array($keys[4], $has)) {
                 array_push($has, $keys[4]);
             }
         }
